@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dora-jenkins-parser
+  namespace: dora
+spec:
+  selector:
+    matchLabels:
+      app: dora-jenkins-parser
+  template:
+    metadata:
+      labels:
+        app: dora-jenkins-parser
+    spec:
+      containers:
+      - name: dora-jenkins-parser
+        image: 492946569230.dkr.ecr.eu-central-1.amazonaws.com/dora-jenkins-parser:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        envFrom:
+          - secretRef:
+              name: dora-jenkins-parser-secrets
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dora-jenkins-parser
+  namespace: dora
+spec:
+  selector:
+    app: dora-jenkins-parser
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dora-jenkins-parser-secrets
+  namespace: dora
+type: Opaque
+data:
+    DB_HOST: dGVzdC1kb3JhLmNsdXN0ZXItY3VhdHc4ZjB3djJwLmV1LWNlbnRyYWwtMS5yZHMuYW1hem9uYXdzLmNvbQ==
+    DB_USER: YWRtaW4=
+    DB_PASSWORD: MEwxQm5VakdGcExldTZFRWl6TDk=
+    DB_NAME: ZG9yYQ==
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:492946569230:certificate/6bbb3067-1567-455b-8d6d-4de9b4e55fad
+    alb.ingress.kubernetes.io/group.name: eks-operations-1-a
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/load-balancer-attributes: routing.http.drop_invalid_header_fields.enabled=true
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/tags: Environment=operations, Provider=Managed by aws-load-balancer-controller
+    external-dns.alpha.kubernetes.io/hostname: dora.aws.vivino.com
+    kubernetes.io/ingress.class: alb
+  name: dora-jenkins-parser
+  namespace: dora
+spec:
+  rules:
+  - host: dora.vivino.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: dora-jenkins-parser
+            port:
+              number: 80
+        path: /jenkins-parser
+        pathType: Prefix
+  tls:
+  - hosts:
+    - dora.vivino.com
