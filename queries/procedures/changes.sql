@@ -1,4 +1,5 @@
 DELIMITER //
+DROP PROCEDURE IF EXISTS update_changes //
 CREATE PROCEDURE update_changes() BEGIN
 INSERT
   IGNORE INTO dora.changes

@@ -4,5 +4,6 @@ CREATE TABLE incidents (
   `time_created` TIMESTAMP NOT NULL,
   `time_resolved` TIMESTAMP NOT NULL,
   `changes` VARCHAR(255) NOT NULL,
+  `project_name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`incident_id`)
 );

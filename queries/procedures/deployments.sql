@@ -1,5 +1,6 @@
 
 DELIMITER //
+DROP PROCEDURE IF EXISTS update_deployments //
 CREATE PROCEDURE update_deployments() BEGIN
 INSERT
   IGNORE INTO dora.deployments

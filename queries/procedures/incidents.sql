@@ -1,4 +1,5 @@
 DELIMITER //
+DROP PROCEDURE IF EXISTS update_incidents //
 CREATE PROCEDURE update_incidents() BEGIN
 INSERT
   IGNORE INTO dora.incidents
@@ -13,7 +14,8 @@ INSERT
       )
     ) as time_created,
     MAX(time_resolved) as time_resolved,
-    root_cause as changes
+    root_cause as changes,
+    project_name
   FROM
     (
       SELECT
@@ -21,7 +23,8 @@ INSERT
         id as incident_id,
         time_created,
         TIMESTAMP(metadata ->> '$.issue.closed_on') AS time_resolved,
-        metadata ->> '$.root_cause' as root_cause
+        metadata ->> '$.root_cause' as root_cause,
+        metadata ->> '$.issue.project.name' as project_name
       FROM
         events_raw
       WHERE
