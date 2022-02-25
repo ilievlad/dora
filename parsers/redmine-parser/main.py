@@ -105,7 +105,7 @@ def process_redmine_event(headers, msg, msg_id):
 
     time_created = datetime.strptime(metadata["issue"]["created_on"], '%Y-%m-%dT%H:%M:%S.%fZ')
 
-    github_event = {
+    redmine_event = {
         "event_type": event_type,
         "id": e_id,
         "metadata": json.dumps(metadata),
@@ -115,7 +115,7 @@ def process_redmine_event(headers, msg, msg_id):
         "source": source,
     }
 
-    return github_event
+    return redmine_event
 
 
 def insert_row_into_mysql(event):
