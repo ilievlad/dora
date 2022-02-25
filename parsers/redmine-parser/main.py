@@ -18,6 +18,7 @@ import pymysql
 import os
 import json
 
+from datetime import datetime, timezone
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -101,8 +102,8 @@ def process_redmine_event(headers, msg, msg_id):
         source += "mock"
 
     e_id = metadata["issue"]["id"]
-    time_created = metadata["issue"]["created_on"]
 
+    time_created = datetime.strptime(metadata["issue"]["created_on"], '%Y-%m-%dT%H:%M:%S.%fZ')
 
     github_event = {
         "event_type": event_type,
