@@ -45,7 +45,7 @@ metadata:
   namespace: dora
 type: Opaque
 data:
-    DB_HOST: dGVzdC1kb3JhLmNsdXN0ZXItY3VhdHc4ZjB3djJwLmV1LWNlbnRyYWwtMS5yZHMuYW1hem9uYXdzLmNvbQ==
+    DB_HOST: dGVzdC1kb3JhLmN1YXR3OGYwd3YycC5ldS1jZW50cmFsLTEucmRzLmFtYXpvbmF3cy5jb20=
     DB_USER: YWRtaW4=
     DB_PASSWORD: MEwxQm5VakdGcExldTZFRWl6TDk=
     DB_NAME: ZG9yYQ==
