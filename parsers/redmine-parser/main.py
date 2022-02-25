@@ -53,12 +53,14 @@ def index():
     msg = json.loads(envelope["Message"])["payload"]
     msg_id = envelope["MessageId"]
 
-    if "Bug" not in msg["issue"]["tracker"]["name"]:
-        print("Not a bug")
+    issue_id = msg["issue"]["id"]
+
+    if "Incident" not in msg["issue"]["tracker"]["name"]:
+        print("{}: Not an incident".format(issue_id))
         return "", 200
 
     if not "root cause:" in msg["issue"]["description"].lower():
-        print("Not an incident")
+        print("{}: Root cause is missing.".format(issue_id))
         return "", 200
 
     if "MessageAttributes" not in envelope:
